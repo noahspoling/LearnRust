@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::io;
 use rand::Rng;
 
@@ -11,7 +12,7 @@ fn main() {
     // Params
     let mut continue_game = true;
     let mut tries = 3;
-    let mut guess_range = 10;
+    let guess_range = 10;
     let mut guess_input = String::new();
     let mut guess_number = 0;
     let mut secret_number = 0;
@@ -21,11 +22,7 @@ fn main() {
 
 
     while continue_game {
-        if tries == 0 {
-            println!("Out of tries! Generating new secret number...");
-            tries = 3;
-            secret_number = rand::random::<u32>() % guess_range + 1;
-        }
+
         println!("Guess the number! (1-{})", guess_range);
         println!("You have {} tries left", tries);
         tries -= 1;
@@ -35,7 +32,7 @@ fn main() {
         io::stdin()
             .read_line(&mut guess_input)
             .expect("Failed to read line");
-        
+
         guess_number = match guess_input.trim().parse() {
             Ok(num) => num,
             Err(_) => {
@@ -45,16 +42,22 @@ fn main() {
         };
 
         println!("You guessed: {}", guess_input);
-        if guess_number < secret_number {
-            println!("Too small!");
-        } else if guess_number > secret_number {
-            println!("Too big!");
-        } else {
-            println!("You win!");
-            tries = 3;
-            secret_number = rand::random::<u32>() % 10 + 1;
-        }
         
+        match guess_number.cmp(&secret_number) {
+            Ordering::Less => { println!("Too small!"); }
+            Ordering::Greater => { println!("Too big!"); }
+            Ordering::Equal => {
+                println!("You win!");
+                tries = 3;
+                secret_number = rand::thread_rng().gen_range(1..guess_range);
+            }
+        };
+        
+        if tries == 0 {
+            println!("Out of tries! Generating new secret number...");
+            tries = 3;
+            secret_number = rand::thread_rng().gen_range(1..guess_range);
+        }
 
         let mut end_game = String::new();
         println!("Do you want to play again? (y/n)");
