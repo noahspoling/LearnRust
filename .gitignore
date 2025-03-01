@@ -1,2 +1,3 @@
 lessons/*/target
 lessons/*.out
+lessons/*/Cargo.lock
