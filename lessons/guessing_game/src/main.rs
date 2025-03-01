@@ -9,16 +9,23 @@ fn main() {
     println!("||                                                       ||");
     println!("==========================================================");
 
+    #[cfg(target_pointer_width = "64")]
+    type Int = u64;
+
+    #[cfg(target_pointer_width = "32")]
+    type Int = u32;
+
     // Params
     let mut continue_game = true;
-    let mut tries = 3;
-    let guess_range = 10;
+    let mut tries : Int = 3;
+    let guess_range : Int = 10;
     let mut guess_input = String::new();
-    let mut guess_number = 0;
-    let mut secret_number = 0;
+    let mut guess_number : Int = 0;
+    let mut secret_number : Int = 0;
+
 
     // Setup
-    secret_number = rand::random::<u32>() % guess_range + 1;
+    secret_number = rand::random::<Int>() % guess_range + 1;
 
 
     while continue_game {
