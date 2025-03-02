@@ -19,7 +19,6 @@ fn main() {
     let mut continue_game = true;
     let guess_range : UInt = 10;
     
-    
     while continue_game {
 
         let mut tries : UInt = 3;
